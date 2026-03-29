@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="testscriptsFlow" doc:id="66d2055c-5b59-4aca-8ceb-89cc0386fff9" >
+		<ee:transform doc:name="Transform Message" doc:id="d1035588-663c-4222-9bc3-d5dacb28fced" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+var myRead = read("<car><color>red</color></car>",
+                "application/xml")
+output application/json
+---
+{
+  mySelection : myRead.car
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
