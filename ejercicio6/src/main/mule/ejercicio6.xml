@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="bc425a92-5e2c-4f71-bda7-61c026e7ed5d" >
+		<http:listener-connection host="0.0.0.0" port="8081" readTimeout="3000" />
+	</http:listener-config>
+	<flow name="ejercicio6Flow" doc:id="3eb6d25e-9d28-48b1-97b5-9e06d62474f1" >
+		<http:listener doc:name="Listener" doc:id="a0fd38e0-be72-4e69-ab95-510460cfa581" config-ref="HTTP_Listener_config" path="ejercicio6"/>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="6d38450e-ccd6-4bd1-97aa-df62f50ebefc" />
+		<choice doc:name="Choice" doc:id="393fb351-9dfb-4cdf-850e-89d5b1f20362" >
+			<when expression="#[vars.language == 'French']">
+				<set-payload value="Bonjour!" doc:name="Contestar Frances" doc:id="c3d134a0-8833-41ad-92b1-6a0cce84e7b5" />
+			</when>
+			<when expression="#[vars.language == 'Spanish']">
+				<set-payload value="¡Buenas!" doc:name="Contestar español" doc:id="ca3b79f9-a092-40ad-8afd-2b2381fa85fd" />
+
+			</when>
+			<otherwise >
+				<flow-ref name="contentar-lenguaje-pordefecto" doc:name="contentar-lenguaje-pordefecto" />
+			</otherwise>
+		</choice>
+	</flow>
+	<sub-flow name="contentar-lenguaje-pordefecto" >
+		<logger level="INFO" doc:name="Logger" message="No language specified. Using English as a default. "/>
+		<set-variable variableName="language" value="English" doc:name="Set Language to English" />
+		<set-payload value="Hello!" doc:name="Reply in English" />
+	</sub-flow>
+</mule>

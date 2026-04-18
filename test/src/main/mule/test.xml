@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f51826f0-4241-4741-87e9-0846fd1dd601" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="testFlow" doc:id="9813416d-ed29-46cd-b7e0-da52d206d5d5" >
+		<http:listener doc:name="Listener" doc:id="225ba799-38c1-40c6-87e8-a9eb08fba1d6" path="test" config-ref="HTTP_Listener_config"/>
+		<logger level="INFO" doc:name="Logger" doc:id="424b452e-293b-42d5-8835-b372c6ec7404" />
+		<set-payload doc:name="Set Payload" doc:id="89a97a54-887b-41a6-93a9-34ae36a6dc56" value="Hola Mundo MTIS"/>
+	</flow>
+</mule>

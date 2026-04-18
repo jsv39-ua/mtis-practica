@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="8fb2a325-7a27-4d08-93e4-f27589602084">
+		<http:listener-connection host="0.0.0.0" port="8081" readTimeout="3000" />
+	</http:listener-config>
+	<flow name="ejercicio4Flow" doc:id="8797bb07-57d7-4afa-afcc-2cc6c1b9bdda" >
+		<http:listener doc:name="Listener" doc:id="23d117ec-0a61-45c7-82fa-23b2b13715e1" path="ejercicio4" config-ref="HTTP_Listener_config"/>
+		<logger level="INFO" doc:name="Logger" doc:id="0527a543-aef0-4f54-b194-f9636aa1986f" />
+		<foreach doc:name="For Each" doc:id="f6d4d5b3-8777-40f3-84a2-dedc62599e03" collection="#[payload.Employees]">
+			<logger level="INFO" doc:name="Logger" doc:id="cc36aaa9-2dde-4548-a7a0-24990adae87d" message='#["userId: " ++ (payload.userId default "") ++ ", Nombre: " ++ (payload.firstName default "")]'/>
+			<ee:transform doc:name="Transform Message" doc:id="a3b4bc76-78ad-45ae-b1af-30b2648409b2" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	
+	"Codigo": payload.employeeCode,
+	"nombreCompleto" : payload.firstName ++ " " ++ payload.lastName
+	
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+		</foreach>
+		<set-payload value="#[payload]" doc:name="Set Payload" doc:id="1a4c03aa-5d24-4d94-b8e4-a3a0ad1b1136" />
+	</flow>
+</mule>
