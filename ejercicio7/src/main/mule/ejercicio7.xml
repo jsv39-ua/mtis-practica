@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="ef815c3d-fa9f-4158-882d-54fba4bfea11" >
+		<jms:active-mq-connection username="admin" password="admin" >
+			<jms:factory-configuration brokerUrl="tcp://localhost:61616" />
+			<jms:connection-factory >
+				<jms:jndi-connection-factory />
+			</jms:connection-factory>
+		</jms:active-mq-connection>
+	</jms:config>
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="013a0bb3-8310-454c-83a5-37169b4acfe4" >
+		<http:listener-connection host="0.0.0.0" port="8081" readTimeout="3000" />
+	</http:listener-config>
+	<flow name="ejercicio7Flow" doc:id="3dae1a5f-1f74-4dde-8fa6-1727fe36e8cc" >
+		<http:listener doc:name="Listener" doc:id="feb58083-d84b-42cc-b800-c8e8ee22121e" path="/publicar" config-ref="HTTP_Listener_config"/>
+		<logger level="INFO" doc:name="Logger" doc:id="76297add-ac2d-4214-8802-3f46ebcd0acf" />
+		<jms:publish doc:name="Publish" doc:id="c9a5a0ad-1385-459f-8ea4-1058f241928f" destination="historiales" destinationType="TOPIC"/>
+		<logger level="INFO" doc:name="Logger" doc:id="6317f116-5edb-46b9-a679-d9590c5a0fe5" />
+	</flow>
+</mule>
