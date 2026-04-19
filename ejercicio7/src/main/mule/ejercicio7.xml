@@ -8,9 +8,6 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="ef815c3d-fa9f-4158-882d-54fba4bfea11" >
 		<jms:active-mq-connection username="admin" password="admin" >
 			<jms:factory-configuration brokerUrl="tcp://localhost:61616" />
-			<jms:connection-factory >
-				<jms:jndi-connection-factory />
-			</jms:connection-factory>
 		</jms:active-mq-connection>
 	</jms:config>
 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="013a0bb3-8310-454c-83a5-37169b4acfe4" >
@@ -21,5 +18,14 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<logger level="INFO" doc:name="Logger" doc:id="76297add-ac2d-4214-8802-3f46ebcd0acf" />
 		<jms:publish doc:name="Publish" doc:id="c9a5a0ad-1385-459f-8ea4-1058f241928f" destination="historiales" destinationType="TOPIC"/>
 		<logger level="INFO" doc:name="Logger" doc:id="6317f116-5edb-46b9-a679-d9590c5a0fe5" />
+	</flow>
+	<flow name="newMessageFlow">
+		<jms:listener doc:name="On New Message" doc:id="232206e3-6003-4b24-923f-01a99544d2b5" destination="historiales" numberOfConsumers="1">
+			<jms:consumer-type >
+				<jms:topic-consumer />
+			</jms:consumer-type>
+		</jms:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="e163dc30-dd99-46b9-9dde-ed0f78d9ae8b" message="Mensaje recibido de topic: #[payload]"/>
+
 	</flow>
 </mule>
