@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="3c502b59-1f38-4100-9c65-c60d41356aeb" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	
+	<flow name="ejercicio8Flow" doc:id="9b7fbf2c-4cec-4c9f-aa5c-9c9310219bb5" >
+		<http:listener doc:name="Listener" doc:id="2fecbf66-b1f0-4fdc-9678-6202fdd15915" config-ref="HTTP_Listener_config" path="ejercicio8"/>
+		<ee:transform doc:name="Transform Message" doc:id="0c99e3d9-5ad3-48af-9947-88969de05da0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/xml
+ns ns0 http://www.example.org/HolaMundo/
+---
+{
+    ns0#NewOperation: {
+        in: attributes.queryParams.nombre
+    }
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<wsc:consume doc:name="Consume" doc:id="b89e0d1b-d328-44e9-9bf9-aa5649aeaf0e" config-ref="Web_Service_Consumer_Config" operation="NewOperation"/>
+		<ee:transform doc:name="Transform Message" doc:id="6392bb38-19ab-4d6c-b718-16c650cae78e" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+ns ns0 http://www.example.org/HolaMundo/
+input payload application/xml
+---
+{
+    resultado: payload.body.ns0#NewOperationResponse.out
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="dddca2d4-642f-4686-b681-01ed98683f8c">
+		<wsc:connection wsdlLocation="HolaMundo.wsdl" port="HolaMundoSOAP" service="HolaMundo" address="http://localhost:81/HolaMundo">
+			<wsc:web-service-security actor="http://schemas.xmlsoap.org/soap/actor/next" />
+		</wsc:connection>
+	</wsc:config>
+</mule>
