@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="c6266453-bebf-4dc8-b59c-cf299f765df7" >
+		<http:listener-connection host="0.0.0.0" port="8081" readTimeout="3000" />
+	</http:listener-config>
+	<flow name="ejercicio9Flow" doc:id="a9f68cda-6de8-4e84-ae4c-2736b980ccae" >
+		<http:listener doc:name="Listener" doc:id="a80969ac-40ff-43a2-849e-5d101ac15f9d" config-ref="HTTP_Listener_config" path="HolaMundo"/>
+		<logger level="INFO" doc:name="Logger" doc:id="1343f662-2805-4739-8d92-ef1fb681df75" />
+		<http:request method="GET" doc:name="Request" doc:id="542345da-5db7-4db8-a2e1-7aa52d68c529" url="127.0.0.1">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	nombre : attributes.queryParams.user
+}]]]></http:query-params>
+		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="513aee8b-f0f3-43ff-9a5e-2b439cc67c79" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "saludo_recibido": "Hola " ++ (payload.nombre default ""),
+    "visitas_registradas": payload.contador,
+    "timestamp_procesamiento": now()
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
