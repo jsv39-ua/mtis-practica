@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></mule>
+<mule xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6d6d429c-b5e3-4c4e-9fa6-7adcf65a5dd4" >
+		<http:listener-connection host="0.0.0.0" port="9093" readTimeout="3000" />
+	</http:listener-config>
+	<wsc:config name="Web_Service_Consumer_Config" doc:name="Web Service Consumer Config" doc:id="86796681-136b-4cfb-9a81-e7855b874437" >
+		<wsc:connection wsdlLocation="api/Empleados.wsdl" port="EmpleadosPort" address="http://localhost:9091/axis2/services/Empleados" />
+	</wsc:config>
+	<flow name="notificar-novalidosFlow" doc:id="48dacfca-47d7-41af-b424-f515956572f3" >
+		<http:listener doc:name="Listener" doc:id="383b6b46-8c2e-462e-b3c7-3af31a6b1e15" config-ref="HTTP_Listener_config" path="procesoNENV"/>
+		<wsc:consume operation="ConsultarTodosEmpleados" doc:name="Consume" doc:id="279a5cf8-a809-405d-9776-919d6b7b24cd" config-ref="Web_Service_Consumer_Config"/>
+	</flow>
+</mule>

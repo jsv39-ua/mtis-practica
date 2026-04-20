@@ -31,14 +31,13 @@
     </db:config>
 
     <flow name="api-main">
-        <http:listener config-ref="api-httpListenerConfig" path="/empleados">
+        <http:listener config-ref="api-httpListenerConfig-rest" path="/empleados">
             <http:response statusCode="#[attributes.additionalTransportData.statusCode default 200]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[attributes.protocolHeaders default {}]</http:headers>
+                <http:headers><![CDATA[#[attributes.protocolHeaders default {}]]]></http:headers>
             </http:response>
             <http:error-response statusCode="#[attributes.additionalTransportData.statusCode default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[attributes.protocolHeaders default {}]</http:headers>
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[attributes.protocolHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
         <apikit-soap:router config-ref="soapkit-config">

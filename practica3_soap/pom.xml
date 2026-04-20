@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-soapkit-module</artifactId>
-			<version>1.3.3</version>
+			<version>1.5.0</version>
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
