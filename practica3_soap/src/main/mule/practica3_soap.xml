@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+      xmlns:email="http://www.mulesoft.org/schema/mule/email"
+      xmlns:file="http://www.mulesoft.org/schema/mule/file"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" 
+      xmlns="http://www.mulesoft.org/schema/mule/core" 
+      xmlns:apikit-soap="http://www.mulesoft.org/schema/mule/apikit-soap" 
+      xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" 
+      xmlns:http="http://www.mulesoft.org/schema/mule/http" 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+      http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+      http://www.mulesoft.org/schema/mule/apikit-soap http://www.mulesoft.org/schema/mule/apikit-soap/current/mule-apikit-soap.xsd 
+      http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+      http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+      http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+      http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+
+    <http:listener-config name="api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="9092"/>
+    </http:listener-config>
+    
+    <apikit-soap:config httpStatusVarName="httpStatus" name="soapkit-config" port="EmpleadosSOAP" service="Empleados" wsdlLocation="Empleados.wsdl"/>
+
+    <file:config name="File_Config" doc:name="File Config" />
+    <email:smtp-config name="Email_SMTP" doc:name="Email SMTP" >
+        <email:smtp-connection host="smtp.ejemplo.com" port="587" user="user" password="password" />
+    </email:smtp-config>
+    <db:config name="Database_Config" doc:name="Database Config" >
+        <db:my-sql-connection host="localhost" port="3306" user="root" password="password" database="practica3" />
+    </db:config>
+
+    <flow name="api-main">
+        <http:listener config-ref="api-httpListenerConfig" path="/empleados">
+            <http:response statusCode="#[attributes.additionalTransportData.statusCode default 200]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[attributes.protocolHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[attributes.additionalTransportData.statusCode default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[attributes.protocolHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit-soap:router config-ref="soapkit-config">
+            <apikit-soap:attributes><![CDATA[#[%dw 2.0
+              output application/java
+              ---
+              {
+                  headers: attributes.headers,
+                  method: attributes.method,
+                  queryString: attributes.queryString
+            }]]]></apikit-soap:attributes>
+        </apikit-soap:router>
+        
+        <error-handler>
+            <on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" type="ANY">
+                <ee:transform doc:name="Transformar a Texto Simple">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output text/plain
+---
+"El proceso se ha tenido que cancelar por errores durante la ejecución"]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+                <email:send doc:name="Enviar Email de Error" config-ref="Email_SMTP" fromAddress="sistema@esb.com" subject="Error en ejecución del ESB">
+                    <email:to-addresses>
+                        <email:to-address value="admin@ejemplo.com" />
+                    </email:to-addresses>
+                </email:send>
+                <db:insert doc:name="Insertar Error en BD" config-ref="Database_Config">
+                    <db:sql><![CDATA[INSERT INTO erroresFlujos (ejecucion_correcta) VALUES (0)]]></db:sql>
+                </db:insert>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+
+    <flow name="nuevo:\soapkit-config">
+        <ee:transform doc:name="Transformar a JSON">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <file:write doc:name="Guardar Fichero JSON" config-ref="File_Config" path="salida_empleados_nuevo.json" mode="APPEND"/>
+    </flow>
+
+    <flow name="borrar:\soapkit-config">
+        <ee:transform doc:name="Transformar a JSON">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <file:write doc:name="Guardar Fichero JSON" config-ref="File_Config" path="salida_empleados_borrar.json" mode="APPEND"/>
+    </flow>
+
+    <flow name="modificar:\soapkit-config">
+        <ee:transform doc:name="Transformar a JSON">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <file:write doc:name="Guardar Fichero JSON" config-ref="File_Config" path="salida_empleados_modificar.json" mode="APPEND"/>
+    </flow>
+
+    <flow name="consultar:\soapkit-config">
+        <ee:transform doc:name="Transformar a JSON">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <file:write doc:name="Guardar Fichero JSON" config-ref="File_Config" path="salida_empleados_consultar.json" mode="APPEND"/>
+    </flow>
+</mule>

@@ -1,0 +1,1245 @@
+#%RAML 1.0
+types:
+  DispositivoInput:
+    description: Datos de entrada para crear o modificar un dispositivo
+    type: object
+    example:
+      strict: false
+      value:
+        codigo: 301
+        descripcion: Terminal lector de tarjeta ubicado en la entrada norte
+    properties:
+      codigo:
+        description: Código del dispositivo
+        example:
+          strict: false
+          value: 301
+        type: number
+        format: int32
+        required: true
+      descripcion?:
+        description: Descripción del dispositivo
+        example:
+          strict: false
+          value: Terminal lector de tarjeta ubicado en la entrada norte
+        type: string
+  NotificacionUsuarioValidoInput:
+    description: Datos de entrada para notificar a un empleado si es válido
+    type: object
+    example:
+      strict: false
+      value:
+        nifnie: 33900165M
+    properties:
+      nifnie:
+        description: NIF/NIE del empleado a notificar
+        example:
+          strict: false
+          value: 33900165M
+        type: string
+        required: true
+  Error:
+    description: Estructura de error estándar de la API
+    type: object
+    examples:
+      generated_1:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Recurso no encontrado
+          mensajeDetalle: No se ha encontrado ninguna sala con el código 101 en la base de datos
+      generated_2:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Datos de entrada incorrectos
+          mensajeDetalle: El campo 'nombre' es obligatorio y no puede estar vacío
+      generated_3:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_4:
+        strict: false
+        value:
+          codigo: 409
+          mensaje: La sala ya existe
+          mensajeDetalle: Ya existe una sala con el código 101 en la base de datos
+      generated_5:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_6:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Sala no encontrada
+          mensajeDetalle: No existe ninguna sala con el código 101 en la base de datos
+      generated_7:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Parámetros de entrada incorrectos
+          mensajeDetalle: El parámetro 'id' debe ser un número entero válido
+      generated_8:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_9:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Sala no encontrada
+          mensajeDetalle: No existe ninguna sala con el código 101 en la base de datos
+      generated_10:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Datos de entrada incorrectos
+          mensajeDetalle: El cuerpo de la petición está vacío o el Content-Type no es application/json
+      generated_11:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_12:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Sala no encontrada
+          mensajeDetalle: No existe ninguna sala con el código 101 en la base de datos
+      generated_13:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Datos de entrada incorrectos
+          mensajeDetalle: El campo 'nivel' es obligatorio y debe ser un número entero
+      generated_14:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_15:
+        strict: false
+        value:
+          codigo: 409
+          mensaje: El nivel ya existe
+          mensajeDetalle: Ya existe un nivel con el identificador 2 en la base de datos
+      generated_16:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_17:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Nivel no encontrado
+          mensajeDetalle: No existe ningún nivel con el identificador 2 en la base de datos
+      generated_18:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Parámetros de entrada incorrectos
+          mensajeDetalle: El parámetro 'nivel' debe ser un número entero válido
+      generated_19:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_20:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Nivel no encontrado
+          mensajeDetalle: No existe ningún nivel con el identificador 2 en la base de datos
+      generated_21:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Datos de entrada incorrectos
+          mensajeDetalle: El cuerpo de la petición está vacío o el Content-Type no es application/json
+      generated_22:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_23:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Nivel no encontrado
+          mensajeDetalle: No existe ningún nivel con el identificador 2 en la base de datos
+      generated_24:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Datos de entrada incorrectos
+          mensajeDetalle: El campo 'codigo' es obligatorio y debe ser un número entero
+      generated_25:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_26:
+        strict: false
+        value:
+          codigo: 409
+          mensaje: El dispositivo ya existe
+          mensajeDetalle: Ya existe un dispositivo con el código 301 en la base de datos
+      generated_27:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_28:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Dispositivo no encontrado
+          mensajeDetalle: No existe ningún dispositivo con el código 301 en la base de datos
+      generated_29:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Parámetros de entrada incorrectos
+          mensajeDetalle: El parámetro 'codigo' debe ser un número entero válido
+      generated_30:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_31:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Dispositivo no encontrado
+          mensajeDetalle: No existe ningún dispositivo con el código 301 en la base de datos
+      generated_32:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Datos de entrada incorrectos
+          mensajeDetalle: El cuerpo de la petición está vacío o el Content-Type no es application/json
+      generated_33:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_34:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Dispositivo no encontrado
+          mensajeDetalle: No existe ningún dispositivo con el código 301 en la base de datos
+      generated_35:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Datos de entrada incorrectos
+          mensajeDetalle: El campo 'codigoSala' es obligatorio y debe ser un número entero
+      generated_36:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_37:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Sala no encontrada o sin empleados presentes
+          mensajeDetalle: No existe ninguna sala con el código 101, o no hay empleados registrados como presentes en ella
+      generated_38:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Datos de entrada incorrectos
+          mensajeDetalle: El campo 'nifnie' es obligatorio y no puede estar vacío
+      generated_39:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_40:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Empleado no encontrado
+          mensajeDetalle: No existe ningún empleado con el NIF/NIE '33900165M' en la base de datos
+      generated_41:
+        strict: false
+        value:
+          codigo: 400
+          mensaje: Datos de entrada incorrectos
+          mensajeDetalle: Los campos 'nifnie' y 'error' son obligatorios y no pueden estar vacíos
+      generated_42:
+        strict: false
+        value:
+          codigo: 401
+          mensaje: No autorizado
+          mensajeDetalle: La WSKey proporcionada no existe en la base de datos
+      generated_43:
+        strict: false
+        value:
+          codigo: 404
+          mensaje: Empleado no encontrado
+          mensajeDetalle: No existe ningún empleado con el NIF/NIE '33900165M' en la base de datos
+    properties:
+      codigo?:
+        description: Código HTTP del error
+        example:
+          strict: false
+          value: 404
+        type: number
+        format: int32
+      mensaje?:
+        description: Descripción breve del error
+        example:
+          strict: false
+          value: Recurso no encontrado
+        type: string
+      mensajeDetalle?:
+        description: Descripción detallada del error producido
+        example:
+          strict: false
+          value: No se ha encontrado ninguna sala con el código 101 en la base de datos
+        type: string
+  Sala:
+    description: Estructura completa de una sala del edificio inteligente
+    type: object
+    example:
+      strict: false
+      value:
+        codigoSala: 101
+        nombre: Sala de Reuniones A
+        nivel: 2
+        mensajeDetalle: Operación realizada correctamente
+    properties:
+      codigoSala:
+        description: Código único de la sala
+        example:
+          strict: false
+          value: 101
+        type: number
+        format: int32
+        required: true
+      nombre:
+        description: Nombre descriptivo de la sala
+        example:
+          strict: false
+          value: Sala de Reuniones A
+        type: string
+        required: true
+      nivel:
+        description: Nivel de seguridad requerido para acceder a la sala
+        example:
+          strict: false
+          value: 2
+        type: number
+        format: int32
+        required: true
+      mensajeDetalle?:
+        description: Mensaje detallado con información adicional o errores producidos
+        example:
+          strict: false
+          value: Operación realizada correctamente
+        type: string
+  RespuestaCreacion:
+    description: Respuesta estándar para operaciones de creación
+    type: object
+    example:
+      strict: false
+      value:
+        id: 101
+        mensaje: Recurso creado correctamente
+        mensajeDetalle: El registro ha sido insertado en la base de datos correctamente
+    properties:
+      id?:
+        description: Identificador del recurso creado
+        example:
+          strict: false
+          value: 101
+        type: number
+        format: int32
+      mensaje?:
+        description: Mensaje descriptivo del resultado de la operación
+        example:
+          strict: false
+          value: Recurso creado correctamente
+        type: string
+      mensajeDetalle?:
+        description: Mensaje detallado con información adicional sobre la operación
+        example:
+          strict: false
+          value: El registro ha sido insertado en la base de datos correctamente
+        type: string
+  SalaInput:
+    description: Datos de entrada para crear o modificar una sala
+    type: object
+    example:
+      strict: false
+      value:
+        codigoSala: 101
+        nombre: Sala de Reuniones A
+        nivel: 2
+    properties:
+      codigoSala:
+        description: Código único de la sala
+        example:
+          strict: false
+          value: 101
+        type: number
+        format: int32
+        required: true
+      nombre:
+        description: Nombre descriptivo de la sala
+        example:
+          strict: false
+          value: Sala de Reuniones A
+        type: string
+        required: true
+      nivel:
+        description: Nivel de seguridad requerido para acceder a la sala
+        example:
+          strict: false
+          value: 2
+        type: number
+        format: int32
+        required: true
+  RespuestaOperacion:
+    description: Respuesta estándar para operaciones de modificación y eliminación
+    type: object
+    example:
+      strict: false
+      value:
+        exito: true
+        mensaje: Operación realizada correctamente
+        mensajeDetalle: El registro ha sido actualizado en la base de datos correctamente
+    properties:
+      exito?:
+        description: Indica si la operación se realizó correctamente
+        example:
+          strict: false
+          value: true
+        type: boolean
+      mensaje?:
+        description: Mensaje descriptivo del resultado de la operación
+        example:
+          strict: false
+          value: Operación realizada correctamente
+        type: string
+      mensajeDetalle?:
+        description: Mensaje detallado con información adicional o errores producidos
+        example:
+          strict: false
+          value: El registro ha sido actualizado en la base de datos correctamente
+        type: string
+  NotificacionPresenciaSalaInput:
+    description: |
+      Datos de entrada para notificar por email a los empleados presentes en una sala
+    type: object
+    example:
+      strict: false
+      value:
+        codigoSala: 101
+    properties:
+      codigoSala:
+        description: Código de la sala cuyos empleados presentes serán notificados
+        example:
+          strict: false
+          value: 101
+        type: number
+        format: int32
+        required: true
+  Dispositivo:
+    description: Estructura completa de un dispositivo de control del edificio
+    type: object
+    example:
+      strict: false
+      value:
+        codigo: 301
+        descripcion: Terminal lector de tarjeta ubicado en la entrada norte
+        mensajeDetalle: Operación realizada correctamente
+    properties:
+      codigo:
+        description: Código único del dispositivo
+        example:
+          strict: false
+          value: 301
+        type: number
+        format: int32
+        required: true
+      descripcion?:
+        description: Descripción del dispositivo
+        example:
+          strict: false
+          value: Terminal lector de tarjeta ubicado en la entrada norte
+        type: string
+      mensajeDetalle?:
+        description: Mensaje detallado con información adicional o errores producidos
+        example:
+          strict: false
+          value: Operación realizada correctamente
+        type: string
+  Nivel:
+    description: Estructura completa de un nivel de seguridad
+    type: object
+    example:
+      strict: false
+      value:
+        nivel: 2
+        descripcion: Acceso restringido a empleados con perfil intermedio
+        mensajeDetalle: Operación realizada correctamente
+    properties:
+      nivel:
+        description: Identificador del nivel de seguridad
+        example:
+          strict: false
+          value: 2
+        type: number
+        format: int32
+        required: true
+      descripcion?:
+        description: Descripción del nivel de seguridad
+        example:
+          strict: false
+          value: Acceso restringido a empleados con perfil intermedio
+        type: string
+      mensajeDetalle?:
+        description: Mensaje detallado con información adicional o errores producidos
+        example:
+          strict: false
+          value: Operación realizada correctamente
+        type: string
+  RespuestaNotificacion:
+    description: Respuesta estándar para operaciones de notificación por email
+    type: object
+    example:
+      strict: false
+      value:
+        emailsEnviados: 3
+        mensaje: Notificaciones enviadas correctamente
+        mensajeDetalle: Se han enviado 3 notificaciones por email a los empleados presentes
+    properties:
+      emailsEnviados?:
+        description: Número de emails enviados correctamente
+        example:
+          strict: false
+          value: 3
+        type: number
+        format: int32
+      mensaje?:
+        description: Mensaje descriptivo del resultado de la operación
+        example:
+          strict: false
+          value: Notificaciones enviadas correctamente
+        type: string
+      mensajeDetalle?:
+        description: Mensaje detallado con información adicional o errores producidos
+        example:
+          strict: false
+          value: Se han enviado 3 notificaciones por email a los empleados presentes
+        type: string
+  NotificacionErrorInput:
+    description: Datos de entrada para notificar un error a un empleado
+    type: object
+    example:
+      strict: false
+      value:
+        nifnie: 33900165M
+        error: Error de acceso a la sala 101, credenciales caducadas
+    properties:
+      nifnie:
+        description: NIF/NIE del empleado al que se le notificará el error
+        example:
+          strict: false
+          value: 33900165M
+        type: string
+        required: true
+      error:
+        description: Descripción del error a notificar
+        example:
+          strict: false
+          value: Error de acceso a la sala 101, credenciales caducadas
+        type: string
+        required: true
+  NivelInput:
+    description: Datos de entrada para crear o modificar un nivel de seguridad
+    type: object
+    example:
+      strict: false
+      value:
+        nivel: 2
+        descripcion: Acceso restringido a empleados con perfil intermedio
+    properties:
+      nivel:
+        description: Identificador del nivel de seguridad
+        example:
+          strict: false
+          value: 2
+        type: number
+        format: int32
+        required: true
+      descripcion?:
+        description: Descripción del nivel de seguridad
+        example:
+          strict: false
+          value: Acceso restringido a empleados con perfil intermedio
+        type: string
+annotationTypes:
+  amf-serverDescription:
+    type: any
+  amf-exclusiveMinimum:
+    type: any
+  amf-binding:
+    type: any
+  amf-pattern:
+    type: any
+  amf-payloads:
+    type: any
+  amf-exclusiveMaximum:
+    type: any
+  amf-consumes:
+    type: any
+  amf-additionalProperties:
+    type: any
+  amf-or:
+    type: any
+  amf-url:
+    type: any
+  amf-externalDocs:
+    type: any
+  amf-flow:
+    type: any
+  amf-oasDeprecated:
+    type: any
+  amf-contact:
+    type: any
+  amf-multipleOf:
+    type: any
+  amf-xor:
+    type: any
+  amf-not:
+    type: any
+  amf-callbacks:
+    type: any
+  amf-produces:
+    type: any
+  amf-format:
+    type: any
+  amf-license:
+    type: any
+  amf-summary:
+    type: any
+  amf-responses:
+    type: any
+  amf-maximum:
+    type: any
+  amf-tags:
+    type: any
+  amf-dependencies:
+    type: any
+  amf-readOnly:
+    type: any
+  amf-tuple:
+    type: any
+  amf-examples:
+    type: any
+  amf-collectionFormat:
+    type: any
+  amf-termsOfService:
+    type: any
+  amf-servers:
+    type: any
+  amf-xone:
+    type: any
+  amf-defaultResponse:
+    type: any
+  amf-baseUriParameters:
+    type: any
+  amf-parameters:
+    type: any
+  amf-minimum:
+    type: any
+  codegen-request-body-name:
+    type: any
+  amf-recursive:
+    type: any
+  amf-and:
+    type: any
+  eov-operation-handler:
+    type: any
+title: Edificio Inteligente API
+baseUri: http://localhost:8081/api/v1
+(amf-serverDescription): Servidor principal Edificio Inteligente
+description: |
+  API REST para la gestión de un edificio inteligente. Proporciona servicios para la gestión de salas, niveles de seguridad, dispositivos de control y notificaciones por email.
+version: 1.0.0
+(amf-contact):
+  email: info@edificiointeligente.org
+(amf-tags):
+  -
+    name: salas
+    description: Gestión de salas del edificio
+  -
+    name: niveles
+    description: Gestión de niveles de seguridad
+  -
+    name: dispositivos
+    description: Gestión de dispositivos de control
+  -
+    name: notificaciones
+    description: Servicio de notificaciones por email
+(amf-license):
+  url: http://www.apache.org/licenses/LICENSE-2.0.html
+  name: Apache 2.0
+/salas:
+  post:
+    displayName: salasPOST
+    description: Crea una nueva sala en la base de datos a partir de la estructura indicada.
+    (amf-summary): Crear nueva sala
+    (amf-tags):
+      - salas
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    body:
+      application/json: SalaInput
+    responses:
+      "201":
+        description: Sala creada correctamente
+        body:
+          application/json: RespuestaCreacion
+      "400":
+        description: Datos de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "409":
+        description: La sala ya existe
+        body:
+          application/json: Error
+    (codegen-request-body-name): salaInput
+    (eov-operation-handler): controllers/SalasController
+/salas/{id}:
+  delete:
+    displayName: salasIdDELETE
+    description: Elimina de la base de datos el registro de la sala indicada por su identificador (clave primaria).
+    (amf-summary): Borrar sala
+    (amf-tags):
+      - salas
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    (amf-baseUriParameters):
+      id:
+        description: Identificador único (PK) de la sala
+        required: true
+        type: number
+        format: int32
+    responses:
+      "200":
+        description: Sala eliminada correctamente
+        body:
+          application/json: RespuestaOperacion
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Sala no encontrada
+        body:
+          application/json: Error
+    (eov-operation-handler): controllers/SalasController
+  get:
+    displayName: salasIdGET
+    description: Devuelve la estructura completa de una sala a partir de su identificador (clave primaria).
+    (amf-summary): Consultar sala
+    (amf-tags):
+      - salas
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    (amf-baseUriParameters):
+      id:
+        description: Identificador único (PK) de la sala
+        required: true
+        type: number
+        format: int32
+    responses:
+      "200":
+        description: Sala encontrada correctamente
+        body:
+          application/json: Sala
+      "400":
+        description: Parámetros de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Sala no encontrada
+        body:
+          application/json: Error
+    (eov-operation-handler): controllers/SalasController
+  put:
+    displayName: salasIdPUT
+    description: |
+      Actualiza en la base de datos el registro de una sala. Se pasa la estructura completa y devuelve un código de estado indicando si la actualización fue correcta.
+    (amf-summary): Modificar sala
+    (amf-tags):
+      - salas
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    body:
+      application/json: SalaInput
+    (amf-baseUriParameters):
+      id:
+        description: Identificador único (PK) de la sala
+        required: true
+        type: number
+        format: int32
+    responses:
+      "200":
+        description: Sala actualizada correctamente
+        body:
+          application/json: RespuestaOperacion
+      "400":
+        description: Datos de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Sala no encontrada
+        body:
+          application/json: Error
+    (codegen-request-body-name): salaInput
+    (eov-operation-handler): controllers/SalasController
+/niveles:
+  post:
+    displayName: nivelesPOST
+    description: Crea un nuevo nivel de seguridad en la base de datos.
+    (amf-summary): Crear nuevo nivel
+    (amf-tags):
+      - niveles
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    body:
+      application/json: NivelInput
+    responses:
+      "201":
+        description: Nivel creado correctamente
+        body:
+          application/json: RespuestaCreacion
+      "400":
+        description: Datos de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "409":
+        description: El nivel ya existe
+        body:
+          application/json: Error
+    (codegen-request-body-name): nivelInput
+    (eov-operation-handler): controllers/NivelesController
+/niveles/{nivel}:
+  delete:
+    displayName: nivelesNivelDELETE
+    description: Elimina de la base de datos el registro del nivel indicado.
+    (amf-summary): Borrar nivel
+    (amf-tags):
+      - niveles
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    (amf-baseUriParameters):
+      nivel:
+        description: Identificador numérico del nivel de seguridad
+        required: true
+        type: number
+        format: int32
+    responses:
+      "200":
+        description: Nivel eliminado correctamente
+        body:
+          application/json: RespuestaOperacion
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Nivel no encontrado
+        body:
+          application/json: Error
+    (eov-operation-handler): controllers/NivelesController
+  get:
+    displayName: nivelesNivelGET
+    description: Devuelve la estructura completa de un nivel a partir de su identificador.
+    (amf-summary): Consultar nivel
+    (amf-tags):
+      - niveles
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    (amf-baseUriParameters):
+      nivel:
+        description: Identificador numérico del nivel de seguridad
+        required: true
+        type: number
+        format: int32
+    responses:
+      "200":
+        description: Nivel encontrado correctamente
+        body:
+          application/json: Nivel
+      "400":
+        description: Parámetros de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Nivel no encontrado
+        body:
+          application/json: Error
+    (eov-operation-handler): controllers/NivelesController
+  put:
+    displayName: nivelesNivelPUT
+    description: |
+      Actualiza en la base de datos el registro de un nivel. Se pasa la estructura completa y devuelve un código de estado indicando si la actualización fue correcta.
+    (amf-summary): Modificar nivel
+    (amf-tags):
+      - niveles
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    body:
+      application/json: NivelInput
+    (amf-baseUriParameters):
+      nivel:
+        description: Identificador numérico del nivel de seguridad
+        required: true
+        type: number
+        format: int32
+    responses:
+      "200":
+        description: Nivel actualizado correctamente
+        body:
+          application/json: RespuestaOperacion
+      "400":
+        description: Datos de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Nivel no encontrado
+        body:
+          application/json: Error
+    (codegen-request-body-name): nivelInput
+    (eov-operation-handler): controllers/NivelesController
+/dispositivos:
+  post:
+    displayName: dispositivosPOST
+    description: Crea un nuevo dispositivo de control en la base de datos.
+    (amf-summary): Crear nuevo dispositivo
+    (amf-tags):
+      - dispositivos
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    body:
+      application/json: DispositivoInput
+    responses:
+      "201":
+        description: Dispositivo creado correctamente
+        body:
+          application/json: RespuestaCreacion
+      "400":
+        description: Datos de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "409":
+        description: El dispositivo ya existe
+        body:
+          application/json: Error
+    (codegen-request-body-name): dispositivoInput
+    (eov-operation-handler): controllers/DispositivosController
+/dispositivos/{id}:
+  delete:
+    displayName: dispositivosIdDELETE
+    description: Elimina de la base de datos el registro del dispositivo indicado por su identificador (clave primaria).
+    (amf-summary): Borrar dispositivo
+    (amf-tags):
+      - dispositivos
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    (amf-baseUriParameters):
+      id:
+        description: Identificador único (PK) del dispositivo
+        required: true
+        type: number
+        format: int32
+    responses:
+      "200":
+        description: Dispositivo eliminado correctamente
+        body:
+          application/json: RespuestaOperacion
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Dispositivo no encontrado
+        body:
+          application/json: Error
+    (eov-operation-handler): controllers/DispositivosController
+  get:
+    displayName: dispositivosIdGET
+    description: Devuelve la estructura completa de un dispositivo a partir de su identificador (clave primaria).
+    (amf-summary): Consultar dispositivo
+    (amf-tags):
+      - dispositivos
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    (amf-baseUriParameters):
+      id:
+        description: Identificador único (PK) del dispositivo
+        required: true
+        type: number
+        format: int32
+    responses:
+      "200":
+        description: Dispositivo encontrado correctamente
+        body:
+          application/json: Dispositivo
+      "400":
+        description: Parámetros de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Dispositivo no encontrado
+        body:
+          application/json: Error
+    (eov-operation-handler): controllers/DispositivosController
+  put:
+    displayName: dispositivosIdPUT
+    description: |
+      Actualiza en la base de datos el registro de un dispositivo. Se pasa la estructura completa y devuelve un código de estado indicando si la actualización fue correcta.
+    (amf-summary): Modificar dispositivo
+    (amf-tags):
+      - dispositivos
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    body:
+      application/json: DispositivoInput
+    (amf-baseUriParameters):
+      id:
+        description: Identificador único (PK) del dispositivo
+        required: true
+        type: number
+        format: int32
+    responses:
+      "200":
+        description: Dispositivo actualizado correctamente
+        body:
+          application/json: RespuestaOperacion
+      "400":
+        description: Datos de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Dispositivo no encontrado
+        body:
+          application/json: Error
+    (codegen-request-body-name): dispositivoInput
+    (eov-operation-handler): controllers/DispositivosController
+/notificaciones/presenciaSala:
+  post:
+    displayName: notificacionesPresenciaSalaPOST
+    description: |
+      Notifica por email a los empleados que se encuentran presentes en alguna sala, indicando el nombre de la sala. Obtiene los valores de las tablas controlpresencia, empleados y salas.
+    (amf-summary): Notificar presencia en sala
+    (amf-tags):
+      - notificaciones
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    body:
+      application/json: NotificacionPresenciaSalaInput
+    responses:
+      "200":
+        description: Notificación enviada correctamente
+        body:
+          application/json: RespuestaNotificacion
+      "400":
+        description: Datos de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Sala no encontrada o sin empleados presentes
+        body:
+          application/json: Error
+    (codegen-request-body-name): notificacionPresenciaSalaInput
+    (eov-operation-handler): controllers/NotificacionesController
+/notificaciones/usuarioValido:
+  post:
+    displayName: notificacionesUsuarioValidoPOST
+    description: |
+      Notifica por email a un empleado si es válido, obteniendo los valores de la tabla empleados. El email se obtiene del campo email de la tabla empleados.
+    (amf-summary): Notificar usuario válido
+    (amf-tags):
+      - notificaciones
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    body:
+      application/json: NotificacionUsuarioValidoInput
+    responses:
+      "200":
+        description: Notificación enviada correctamente
+        body:
+          application/json: RespuestaNotificacion
+      "400":
+        description: Datos de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Empleado no encontrado
+        body:
+          application/json: Error
+    (codegen-request-body-name): notificacionUsuarioValidoInput
+    (eov-operation-handler): controllers/NotificacionesController
+/notificaciones/error:
+  post:
+    displayName: notificacionesErrorPOST
+    description: |
+      Notifica por email a un empleado de un error producido en el sistema. El email se obtiene del campo email de la tabla empleados.
+    (amf-summary): Notificar error a empleado
+    (amf-tags):
+      - notificaciones
+    queryParameters:
+      WSKey:
+        description: |
+          Clave de autenticación del servicio web. Debe existir en la base de datos para que la operación sea ejecutada.
+        required: false
+        type: string
+    body:
+      application/json: NotificacionErrorInput
+    responses:
+      "200":
+        description: Notificación de error enviada correctamente
+        body:
+          application/json: RespuestaNotificacion
+      "400":
+        description: Datos de entrada incorrectos
+        body:
+          application/json: Error
+      "401":
+        description: WSKey no válida
+        body:
+          application/json: Error
+      "404":
+        description: Empleado no encontrado
+        body:
+          application/json: Error
+    (codegen-request-body-name): notificacionErrorInput
+    (eov-operation-handler): controllers/NotificacionesController

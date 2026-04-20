@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db"
+      xmlns:email="http://www.mulesoft.org/schema/mule/email"
+      xmlns:file="http://www.mulesoft.org/schema/mule/file"
+      xmlns="http://www.mulesoft.org/schema/mule/core" 
+      xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" 
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" 
+      xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" 
+      xmlns:http="http://www.mulesoft.org/schema/mule/http" 
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd 
+      http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+      http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+      http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+      http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+      http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+      http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+
+    <http:listener-config name="api-httpListenerConfig-rest">
+        <http:listener-connection host="0.0.0.0" port="9092"/>
+    </http:listener-config>
+
+    <file:config name="File_Config_Rest" />
+    <email:smtp-config name="Email_SMTP_Rest" >
+        <email:smtp-connection host="smtp.ejemplo.com" port="587" user="user" password="password" />
+    </email:smtp-config>
+    <db:config name="Database_Config_Rest" >
+        <db:my-sql-connection host="localhost" port="3306" user="root" password="password" database="practica3" />
+    </db:config>
+
+    <apikit:config name="api-practica3-rest-niveles-yaml-config" api="api-practica3-rest-niveles-yaml.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    
+    <flow name="api-practica3-rest-niveles-yaml-main">
+        <http:listener config-ref="api-httpListenerConfig-rest" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="api-practica3-rest-niveles-yaml-config" />
+        <error-handler>
+            <on-error-propagate enableNotifications="true" logException="true" type="ANY">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output text/plain
+---
+"El proceso se ha tenido que cancelar por errores durante la ejecución"]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">500</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+                <email:send doc:name="Enviar email error" config-ref="Email_SMTP_Rest" fromAddress="sistema@esb.com" subject="Error en ESB Niveles">
+                    <email:to-addresses>
+                        <email:to-address value="admin@ejemplo.com" />
+                    </email:to-addresses>
+                </email:send>
+                <db:insert doc:name="Insertar error DB" config-ref="Database_Config_Rest">
+                    <db:sql><![CDATA[INSERT INTO erroresFlujos (ejecucion_correcta) VALUES (0)]]></db:sql>
+                </db:insert>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+
+    <flow name="api-practica3-rest-niveles-yaml-console">
+        <http:listener config-ref="api-httpListenerConfig-rest" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="api-practica3-rest-niveles-yaml-config" />
+    </flow>
+
+    <flow name="put:\niveles\(nivel):application\json:api-practica3-rest-niveles-yaml-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="nivel">attributes.uriParams.'nivel'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="Transform Message XML">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+respuesta: {
+  exito: true,
+  mensaje: "Operación realizada correctamente",
+  mensajeDetalle: "El registro ha sido actualizado en la base de datos correctamente"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <file:write doc:name="Guardar fichero" config-ref="File_Config_Rest" path="salida_niveles_put.xml" mode="APPEND"/>
+    </flow>
+
+    <flow name="delete:\niveles\(nivel):api-practica3-rest-niveles-yaml-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="nivel">attributes.uriParams.'nivel'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="Transform Message XML">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+respuesta: {
+  exito: true,
+  mensaje: "Operación realizada correctamente",
+  mensajeDetalle: "El registro ha sido actualizado en la base de datos correctamente"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <file:write doc:name="Guardar fichero" config-ref="File_Config_Rest" path="salida_niveles_delete.xml" mode="APPEND"/>
+    </flow>
+
+    <flow name="get:\niveles\(nivel):api-practica3-rest-niveles-yaml-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="nivel">attributes.uriParams.'nivel'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="Transform Message XML">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+respuesta: {
+  nivel: 2,
+  descripcion: "Acceso restringido a empleados con perfil intermedio",
+  mensajeDetalle: "Operación realizada correctamente"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <file:write doc:name="Guardar fichero" config-ref="File_Config_Rest" path="salida_niveles_get.xml" mode="APPEND"/>
+    </flow>
+
+    <flow name="post:\niveles:application\json:api-practica3-rest-niveles-yaml-config">
+        <ee:transform doc:name="Transform Message XML">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/xml
+---
+respuesta: {
+  id: 101,
+  mensaje: "Recurso creado correctamente",
+  mensajeDetalle: "El registro ha sido insertado en la base de datos correctamente"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <file:write doc:name="Guardar fichero" config-ref="File_Config_Rest" path="salida_niveles_post.xml" mode="APPEND"/>
+    </flow>
+
+    <flow name="put:\dispositivos\(id):application\json:api-practica3-rest-niveles-yaml-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="id">attributes.uriParams.'id'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  exito: true,
+  mensaje: "Operación realizada correctamente"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    
+    </mule>
